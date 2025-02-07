@@ -1,7 +1,7 @@
 
 <!doctype html>
 <html lang="en" data-bs-theme="auto">
-  <head><script src="/js/color-modes.js"></script>
+  <head><script src="{{ asset('js/color-modes.js') }}"></script>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,17 +12,17 @@
     
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
-    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
-    <link href="/css/navbar-static.css" rel="stylesheet">
-    <link href="/css/styles.css" rel="stylesheet">
+    <link href="{{ asset('css/navbar-static.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
 
-    <link rel="apple-touch-icon" href="/favicons/apple-touch-icon.png" sizes="180x180">
-    <link rel="icon" href="/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
-    <link rel="icon" href="/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
-    <link rel="manifest" href="/favicons/manifest.json">
-    <link rel="mask-icon" href="/favicons/safari-pinned-tab.svg" color="#712cf9">
-    <link rel="icon" href="/favicons/favicon.ico">
+    <link rel="apple-touch-icon" href="{{ asset('favicons/apple-touch-icon.png') }}" sizes="180x180">
+    <link rel="icon" href="{{ asset('favicons/favicon-32x32.png') }}" sizes="32x32" type="image/png">
+    <link rel="icon" href="{{ asset('favicons/favicon-16x16.png') }}" sizes="16x16" type="image/png">
+    <link rel="manifest" href="{{ asset('favicons/manifest.json') }}">
+    <link rel="mask-icon" href="{{ asset('/favicons/safari-pinned-tab.svg') }}" color="#712cf9">
+    <link rel="icon" href="{{ asset('favicons/favicon.ico') }}">
     <meta name="theme-color" content="#712cf9">
 
     <script
