@@ -87,7 +87,7 @@
     
 <nav  class="navbar navbar-expand-md navbar-dark bg-blue mb-4">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">{{ env('SITE_TITLE') }}</a>
+    <a class="navbar-brand" href="#">{{ env('SITE_TITLE') }}</a> <div class="vr"></div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -136,11 +136,11 @@
             @endforeach
           </ul>
         </li>
-
-          <div class="d-flex" role="search">
-            <input class="form-control me-2" type="text" placeholder="Message filter" aria-label="Search" value="{{ Request::get('message') }}" id="messageFilter">
-            <button class="btn btn-outline-success" type="submit" id="applyMessageFilter">Search</button>
-          </div>
+        <div class="vr"></div>
+        <div class="d-flex" role="search">
+          <input class="form-control me-2" type="text" placeholder="Message filter" aria-label="Search" value="{{ Request::get('message') }}" id="messageFilter">
+          <button class="btn btn-success" type="submit" id="applyMessageFilter">Search</button>
+        </div>
 
         
 

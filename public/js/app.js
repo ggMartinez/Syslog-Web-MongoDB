@@ -1,9 +1,9 @@
 $("#applyMessageFilter").click(function(){
     var urlParams = new URLSearchParams(window.location.search);
 
-    if ([...urlParams].length === 0)
+    if ([...urlParams].length == 0)
         window.location.href = "/?message=" + encodeURIComponent($("#messageFilter").val());
-    else 
+    else {
         var destination = "?";
         for (let [key, value] of urlParams) {
             if (key !== "message")
@@ -13,6 +13,7 @@ $("#applyMessageFilter").click(function(){
             destination += "&message=" + $("#messageFilter").val();
 
         window.location.href = destination;
+    }
     
 
 });
