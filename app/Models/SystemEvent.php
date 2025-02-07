@@ -7,4 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class SystemEvent extends Model
 {
     public $timestamps = false;
+    protected $table = 'SystemEvents';
 }

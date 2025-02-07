@@ -1,13 +1,11 @@
 @include('layouts.header')
     
-    <p class="fs-3">
-        Active Monitors
-        <a href="#"  type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#newMonitor"><i class="bi bi-plus-circle"></i> New Monitor</a>
-    </p>
-    
-    <br><br>
+    @if(is_null(Request::get('host')))
+        <h3>All Logged events</h3>
+    @else 
+        <h3>"{{ Request::get('host')}}" Logged events</h3>
+    @endif
 
-    @include("components.messages")
     @include("components.eventList")
 
 

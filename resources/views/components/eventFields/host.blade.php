@@ -1,1 +1,1 @@
-{{ $event -> FromHost }}
+<b>{{ $event -> FromHost }}<b>

@@ -30,7 +30,6 @@
       integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc="
       crossorigin="anonymous"></script>
 
-    <script src="/js/updateModal.js"></script>
     
   </head>
   <body>
@@ -86,23 +85,67 @@
     </div>
 
     
-<nav  class="navbar navbar-expand-md navbar-dark bg-orange mb-4">
+<nav  class="navbar navbar-expand-md navbar-dark bg-blue mb-4">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">BlackBox Exporter HTTP Discover</a>
+    <a class="navbar-brand" href="#">{{ env('SITE_TITLE') }}</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
       <ul class="navbar-nav me-auto mb-2 mb-md-0">
         <li class="nav-item">
-          <a class="nav-link" href="/api/monitor"> <i style="font-size: 18px" class="bi bi-braces"></i> Show JSON</a>
+          <a class="nav-link active " href="/"> <i style="font-size: 18px" class="bi bi-bootstrap-reboot"></i> Reset filters</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/monitor/export"> <i style="font-size: 18px" class="bi bi-file-arrow-down"></i> Export CSV</a>
+        <li class="nav-item dropdown">
+          <a class="nav-link active dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false"> <i style="font-size: 18px" class="bi bi-hdd-rack"></i> Hosts</a>
+          <ul class="dropdown-menu bg-blue">
+            @if(is_null(Request::get("tag")) && is_null(Request::get("message")))
+              <li><a class="dropdown-item" href="/">All hosts</a></li>
+            @else
+              <li><a class="dropdown-item" href="/?@foreach(Request::except(["host"]) as $key => $value)&{{ $key }}={{ $value }}@endforeach">All hosts</a></li>
+            @endif
+
+            <li><hr class="dropdown-divider"></li>
+            @foreach($Hosts as $host)
+              @if(is_null(Request::get("host")))
+                <li><a class="dropdown-item" href="/?@foreach(Request::query() as $key => $value)&{{ $key }}={{ $value }}@endforeach&host={{$host}}">{{ $host }}</a></li>
+              @else 
+                <li><a class="dropdown-item" href="/?@foreach(Request::except(["host"]) as $key => $value)&{{ $key }}={{ $value }}@endforeach&host={{$host}}">{{ $host }}</a></li>
+              @endif 
+
+            @endforeach
+          </ul>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#importCsv"> <i style="font-size: 18px" class="bi bi-file-arrow-up"></i> Import CSV</a>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link active dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false"> <i style="font-size: 18px" class="bi bi-bookmark-dash"></i> Syslog Tags</a>
+          <ul class="dropdown-menu bg-blue">
+            @if(is_null(Request::get("host")) && is_null(Request::get("message")))
+              <li><a class="dropdown-item" href="/">All tags</a></li>
+            @else
+              <li><a class="dropdown-item" href="/?@foreach(Request::except(["tag"]) as $key => $value)&{{ $key }}={{ $value }}@endforeach">All tags</a></li>
+            @endif
+
+            <li><hr class="dropdown-divider"></li>
+            @foreach($Tags as $tag)
+              @if(is_null(Request::get("tag")))
+                <li><a class="dropdown-item" href="/?@foreach(Request::query() as $key => $value)&{{ $key }}={{ $value }}@endforeach&tag={{$tag}}">{{ $tag }}</a></li>
+              @else 
+                <li><a class="dropdown-item" href="/?@foreach(Request::except(["tag"]) as $key => $value)&{{ $key }}={{ $value }}@endforeach&tag={{$tag}}">{{ $tag }}</a></li>
+              @endif 
+            @endforeach
+          </ul>
         </li>
+
+          <div class="d-flex" role="search">
+            <input class="form-control me-2" type="text" placeholder="Message filter" aria-label="Search" value="{{ Request::get('message') }}" id="messageFilter">
+            <button class="btn btn-outline-success" type="submit" id="applyMessageFilter">Search</button>
+          </div>
+
+        
+
+        
+          
       </ul>
       
     </div>

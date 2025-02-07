@@ -5,6 +5,10 @@ html {
   background-color: #ff4000;
 }
 
+.bg-blue {
+  background-color: #005eff;
+}
+
 .bd-placeholder-img {
   font-size: 1.125rem;
   text-anchor: middle;
