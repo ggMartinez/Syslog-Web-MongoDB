@@ -1,0 +1,1 @@
+{{ $FormatService -> FormatFacility($event -> Facility) }}
