@@ -1,66 +1,68 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Syslog Web interface
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Done with Laravel. Pretty simple web UI to view Syslog generated logs
 
-## About Laravel
+## Database
+### Preparations
+The project includes a migration to create the needed table, and will start the MySQL container with the `compose.yml` file. But if you want to use an external database, just make sure that this table is created:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+```sql
+CREATE TABLE SystemEvents (
+  ID int unsigned NOT NULL AUTO_INCREMENT,
+  CustomerID bigint DEFAULT NULL,
+  ReceivedAt datetime DEFAULT NULL,
+  DeviceReportedTime datetime DEFAULT NULL,
+  Facility smallint DEFAULT NULL,
+  Priority smallint DEFAULT NULL,
+  FromHost varchar(60) DEFAULT NULL,
+  Message text,
+  NTSeverity int DEFAULT NULL,
+  Importance int DEFAULT NULL,
+  EventSource varchar(60) DEFAULT NULL,
+  EventUser varchar(60) DEFAULT NULL,
+  EventCategory int DEFAULT NULL,
+  EventID int DEFAULT NULL,
+  EventBinaryData text,
+  MaxAvailable int DEFAULT NULL,
+  CurrUsage int DEFAULT NULL,
+  MinUsage int DEFAULT NULL,
+  MaxUsage int DEFAULT NULL,
+  InfoUnitID int DEFAULT NULL,
+  SysLogTag varchar(60) DEFAULT NULL,
+  EventLogType varchar(60) DEFAULT NULL,
+  GenericFileName varchar(60) DEFAULT NULL,
+  SystemID int DEFAULT NULL,
+  PRIMARY KEY (ID)
+) ENGINE=InnoDB
+```
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Then, point the external database in the `compose.yml` file: 
+```
+- DB_HOST=IP
+- DB_DATABASE=DB_NAME
+- DB_USERNAME=username
+- DB_PASSWORD=password
+```
+## Start
+Just run `docker compose up -d` in the root of the project to start both web UI and database.
+If you want to only start the web UI to use an external database, run `docker compose up -d web-ui`
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+If you don't want to use Docker, just install al dependencies for running Laravel by yourself. It's out of scope for this. But to put it simple, have composer and PHP 8 installed, and to just test if it will run outside Docker:
+```bash
+composer install
+php artisan key:generate
+php artisan serve
+```
+Not the best way to use `php artisan serve` on production, just configure Apache and/or PHP-FPM for production.
 
-## Learning Laravel
+## Clients
+First, install the module that allow Syslog to write to mysql databases. 
+For example, rsyslog, install the package `rsyslog-mysql`:
+`dnf install -y rsyslog-mysql`
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Then edit `/etc/rsyslog.conf` on the servers that you want to send the logs to the database, and add this lines:
+```
+$ModLoad ommysql
+local6.* :ommysql:DATABASE_IP,DATABASE_NAME,DATABASE_USER,DATABASE_PASSWORD`
+```
+Then, just restart rsyslog: `systemctl restart rsyslog`

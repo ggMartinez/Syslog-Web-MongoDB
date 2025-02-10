@@ -1,5 +1,5 @@
 services:
-  web:
+  web-ui:
     image: ggmartinez/laravel:php-8.2-apache
     ports:
       - "8000:80"
