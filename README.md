@@ -1,6 +1,7 @@
 # Syslog Web interface
 
-Done with Laravel. Pretty simple web UI to view Syslog generated logs
+Done with Laravel. Pretty simple web UI to view Syslog generated logs.
+It uses my own Docker image with Rocky Linux, PHP 8 and Apache installed and configured.
 
 ## Database
 ### Preparations
