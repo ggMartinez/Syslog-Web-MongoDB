@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use MongoDB\Laravel\Eloquent\Model;
+
 
 class SystemEvent extends Model
 {
     public $timestamps = false;
-    protected $table = 'SystemEvents';
+    protected $collection = 'system_events';
 }

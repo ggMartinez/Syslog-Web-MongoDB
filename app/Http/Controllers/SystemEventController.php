@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\SystemEvent;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class SystemEventController extends Controller
 {
@@ -35,7 +36,8 @@ class SystemEventController extends Controller
         if(Cache::has('hosts'))
             return Cache::get('hosts');
         
-        $hosts = SystemEvent::select('FromHost')->distinct()->pluck("FromHost");
+        $hosts = DB::table('system_events')->distinct("FromHost")->get();
+       
         Cache::put('hosts', $hosts, 300);
         return $hosts;
     }
@@ -44,7 +46,8 @@ class SystemEventController extends Controller
         if(Cache::has('tags'))
             return Cache::get('tags');
         
-        $tags = SystemEvent::select('SysLogTag')->distinct()->pluck("SysLogTag");
+        
+        $tags = DB::table('system_events')->distinct("SysLogTag")->get();
         Cache::put('tags', $tags, 300);
         return $tags;
     }
